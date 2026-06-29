@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Приветики, Юля 🐾</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #fdf0f5;
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ─── Floating paws background ─── */
+    .paws {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .paw {
+      position: absolute;
+      font-size: 1.4rem;
+      opacity: 0;
+      animation: pawFloat linear infinite;
+    }
+    @keyframes pawFloat {
+      0%   { opacity: 0; transform: translateY(100vh) rotate(0deg); }
+      10%  { opacity: 0.18; }
+      90%  { opacity: 0.07; }
+      100% { opacity: 0; transform: translateY(-20vh) rotate(30deg); }
+    }
+
+    /* ─── Screens ─── */
+    .screen {
+      display: none;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 460px;
+      padding: 24px;
+      animation: popIn 0.45s cubic-bezier(.34,1.56,.64,1);
+    }
+    .screen.active { display: flex; flex-direction: column; align-items: center; }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.88) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 40px 32px 36px;
+      box-shadow: 0 8px 40px rgba(220, 80, 130, 0.12);
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ─── Screen 1 ─── */
+    .s1-emoji { font-size: 3.5rem; margin-bottom: 20px; display: block; }
+
+    .s1-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #2d2d2d;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .s1-sub {
+      font-size: 0.95rem;
+      color: #b07090;
+      margin-bottom: 36px;
+    }
+
+    /* Dachshund button */
+    .dog-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .dog-wrap {
+      position: relative;
+      width: 130px;
+      height: 70px;
+      animation: dogWiggle 2.5s ease-in-out infinite;
+    }
+    @keyframes dogWiggle {
+      0%, 100% { transform: rotate(-3deg) scale(1); }
+      50%       { transform: rotate(3deg) scale(1.05); }
+    }
+    .dog-btn:hover .dog-wrap { animation: dogBounce 0.4s ease infinite; }
+    @keyframes dogBounce {
+      0%, 100% { transform: translateY(0) scale(1.08); }
+      50%       { transform: translateY(-8px) scale(1.12); }
+    }
+
+    /* SVG dachshund */
+    .dog-svg { width: 130px; height: 70px; }
+
+    .dog-label {
+      font-size: 0.88rem;
+      color: #c47090;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    /* ─── Screen 2 ─── */
+    .s2-question {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #2d2d2d;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .s2-sub {
+      font-size: 0.9rem;
+      color: #c47090;
+      margin-bottom: 32px;
+    }
+
+    .answer-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+    }
+    .answer-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 18px;
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .btn-yes {
+      background: linear-gradient(135deg, #f875aa, #e91e8c);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(233,30,140,0.35);
+    }
+    .btn-yes:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 28px rgba(233,30,140,0.45); }
+
+    .btn-no {
+      background: #f5f0f5;
+      color: #999;
+      border: 1.5px solid #eedde8;
+    }
+    .btn-no:hover { background: #eedde8; color: #c47090; }
+
+    /* ─── Screen 3 YES ─── */
+    .s3-photo {
+      width: 100%;
+      max-width: 300px;
+      height: 300px;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+    .s3-yes-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #e91e8c;
+      margin-bottom: 10px;
+    }
+    .s3-yes-sub {
+      font-size: 1rem;
+      color: #888;
+      line-height: 1.6;
+    }
+    .confetti-btn {
+      margin-top: 24px;
+      background: linear-gradient(135deg, #f875aa, #e91e8c);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 32px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(233,30,140,0.3);
+      transition: transform 0.18s;
+    }
+    .confetti-btn:hover { transform: scale(1.05); }
+
+    /* ─── Screen 3 NO ─── */
+    .s3-no-dog {
+      font-size: 7rem;
+      margin-bottom: 8px;
+      display: block;
+      animation: sadBob 2s ease-in-out infinite;
+    }
+    @keyframes sadBob {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+    .s3-no-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .s3-no-sub {
+      font-size: 0.92rem;
+      color: #aaa;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .retry-btn {
+      background: #f5f0f5;
+      color: #c47090;
+      border: 1.5px solid #eedde8;
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .retry-btn:hover { background: #eedde8; transform: scale(1.03); }
+
+    /* ─── Confetti ─── */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 999;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating paws -->
+<div class="paws" id="pawsBg"></div>
+
+<!-- ══════════ SCREEN 1 ══════════ -->
+<div class="screen active" id="s1">
+  <div class="card">
+    <span class="s1-emoji">🌸</span>
+    <p class="s1-text">Приветики! Юля,<br>у меня для тебя вопрос</p>
+    <p class="s1-sub">нажми на собачку 👇</p>
+
+    <button class="dog-btn" onclick="goTo('s2')">
+      <div class="dog-wrap">
+        <!-- Cute dachshund SVG -->
+        <svg class="dog-svg" viewBox="0 0 130 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Body -->
+          <ellipse cx="65" cy="42" rx="42" ry="18" fill="#c8845a"/>
+          <!-- Head -->
+          <ellipse cx="105" cy="33" rx="18" ry="16" fill="#c8845a"/>
+          <!-- Snout -->
+          <ellipse cx="118" cy="38" rx="8" ry="6" fill="#b06840"/>
+          <!-- Nose -->
+          <ellipse cx="124" cy="37" rx="3.5" ry="2.5" fill="#3d2010"/>
+          <!-- Eye -->
+          <circle cx="112" cy="30" r="3.5" fill="#fff"/>
+          <circle cx="113" cy="30" r="2" fill="#3d2010"/>
+          <circle cx="114" cy="29" r="0.8" fill="#fff"/>
+          <!-- Ear -->
+          <ellipse cx="100" cy="23" rx="9" ry="13" fill="#a06030" transform="rotate(-15 100 23)"/>
+          <!-- Legs -->
+          <rect x="32" y="54" width="10" height="14" rx="5" fill="#b07040"/>
+          <rect x="48" y="54" width="10" height="14" rx="5" fill="#b07040"/>
+          <rect x="70" y="54" width="10" height="14" rx="5" fill="#b07040"/>
+          <rect x="86" y="54" width="10" height="14" rx="5" fill="#b07040"/>
+          <!-- Tail -->
+          <path d="M23 40 Q10 30 14 20 Q16 14 22 18" stroke="#c8845a" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <!-- Collar -->
+          <rect x="85" y="40" width="22" height="6" rx="3" fill="#e91e8c"/>
+          <circle cx="96" cy="46" r="2.5" fill="#ffd700"/>
+        </svg>
+      </div>
+      <span class="dog-label">🐾 нажми на меня!</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 2 ══════════ -->
+<div class="screen" id="s2">
+  <div class="card">
+    <p class="s2-question">Давай сходим<br>на свидание? 👉👈</p>
+    <p class="s2-sub">это очень важный вопрос, думай серьёзно</p>
+    <div class="answer-btns">
+      <button class="answer-btn btn-yes" onclick="goTo('s3yes')">🥰 Давай!</button>
+      <button class="answer-btn btn-no"  onclick="goTo('s3no')">Нет(</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 3 — YES ══════════ -->
+<div class="screen" id="s3yes">
+  <div class="card">
+    <img src="photo.jpg" class="s3-photo" alt="это я" onerror="this.style.display='none'" />
+    <p class="s3-yes-title">Ура!! 🎉</p>
+    <p class="s3-yes-sub">я уже очень рад 🥹<br>скоро напишу, договоримся!</p>
+    <button class="confetti-btn" onclick="boom()">🎊 Нажми ещё раз!</button>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 3 — NO ══════════ -->
+<div class="screen" id="s3no">
+  <div class="card">
+    <span class="s3-no-dog">🐶</span>
+    <p class="s3-no-title">ну и ладно... 😔</p>
+    <p class="s3-no-sub">пёсик расстроился.<br>я тоже немного.</p>
+    <button class="retry-btn" onclick="goTo('s2')">← подумать ещё раз?</button>
+  </div>
+</div>
+
+<script>
+  // Floating paws
+  const pawsBg = document.getElementById('pawsBg');
+  const pawEmojis = ['🐾','🌸','💕','✨','🐾','🌷'];
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('div');
+    p.className = 'paw';
+    p.textContent = pawEmojis[Math.floor(Math.random() * pawEmojis.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (10 + Math.random() * 14) + 's';
+    p.style.animationDelay = (Math.random() * 14) + 's';
+    p.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+    pawsBg.appendChild(p);
+  }
+
+  function goTo(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 's3yes') setTimeout(boom, 300);
+  }
+
+  function boom() {
+    const colors = ['#f875aa','#e91e8c','#ffd700','#ff6b9d','#fff','#c8845a'];
+    for (let i = 0; i < 80; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.top = '-10px';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.width = (6 + Math.random() * 8) + 'px';
+      c.style.height = (6 + Math.random() * 8) + 'px';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      c.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+      c.style.animationDelay = Math.random() * 0.5 + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }
+  }
+</script>
+</body>
+</html>
