@@ -190,6 +190,19 @@
       border: 1.5px solid #eedde8;
     }
     .btn-no:hover { background: #eedde8; color: #c47090; }
+    .btn-date {
+      background: #fff;
+      color: #2d2d2d;
+      border: 2px solid #f0d0e0;
+      font-size: 1.05rem;
+      transition: all 0.2s;
+    }
+    .btn-date:hover {
+      border-color: #e91e8c;
+      background: #fff0f7;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(233,30,140,0.15);
+    }
 
     /* ─── Screen 3 YES ─── */
     .s3-photo {
@@ -368,8 +381,43 @@
   <div class="card" style="padding-bottom:40px">
     <img src="photo.jpg" class="s3-photo" alt="это я" onerror="this.style.display='none'" />
     <p class="s3-yes-title">Вадим доволен 😌</p>
-    <p class="s3-yes-sub">я уже очень рад 🥹<br>скоро напишу, договоримся!</p>
-    <button class="confetti-btn" onclick="boom()">🎊 Нажми ещё раз!</button>
+    <p class="s3-yes-sub">я уже очень рад 🥹</p>
+    <button class="confetti-btn" onclick="goTo('s4')">Отлично, планируем! 🗓️</button>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 4 — ДАТА ══════════ -->
+<div class="screen" id="s4">
+  <div class="card" style="padding-bottom:40px">
+    <span style="font-size:2.5rem;display:block;margin-bottom:16px">💼</span>
+    <p class="s2-question" style="font-size:1.25rem;margin-bottom:8px">Так как ты занятая бизнес-леди,</p>
+    <p class="s2-sub" style="margin-bottom:28px">предлагаю следующие даты:</p>
+    <div class="answer-btns">
+      <button class="answer-btn btn-date" onclick="pickDate('7 июля')">📅 7 июля</button>
+      <button class="answer-btn btn-date" onclick="pickDate('8 июля')">📅 8 июля</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 5 — ЧТО ДЕЛАЕМ ══════════ -->
+<div class="screen" id="s5">
+  <div class="card" style="padding-bottom:40px">
+    <span style="font-size:2.5rem;display:block;margin-bottom:16px">✨</span>
+    <p class="s2-question" style="font-size:1.3rem;margin-bottom:24px">Что бы ты хотела?</p>
+    <div class="answer-btns">
+      <button class="answer-btn btn-date" onclick="pickActivity('Уютный домашний ужин 🏠')">🏠 Уютный домашний ужин</button>
+      <button class="answer-btn btn-date" onclick="pickActivity('Просекко на закате 🌅')">🥂 Просекко на закате</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 6 — ФИНАЛ ══════════ -->
+<div class="screen" id="s6">
+  <div class="card" style="padding-bottom:40px">
+    <span style="font-size:3.5rem;display:block;margin-bottom:16px">🎉</span>
+    <p class="s3-yes-title">Договорились!</p>
+    <p class="s3-yes-sub" id="finalText" style="margin-bottom:24px"></p>
+    <button class="confetti-btn" onclick="boom()">🎊 Нажми!</button>
   </div>
 </div>
 
@@ -398,10 +446,26 @@
     pawsBg.appendChild(p);
   }
 
+  let chosenDate = '';
+  let chosenActivity = '';
+
   function goTo(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     if (id === 's3yes') setTimeout(boom, 300);
+  }
+
+  function pickDate(date) {
+    chosenDate = date;
+    goTo('s5');
+  }
+
+  function pickActivity(activity) {
+    chosenActivity = activity;
+    document.getElementById('finalText').innerHTML =
+      `${chosenDate} — ${chosenActivity} 🥰<br><br>скоро напишу, обговорим детали!`;
+    goTo('s6');
+    setTimeout(boom, 300);
   }
 
   function boom() {
