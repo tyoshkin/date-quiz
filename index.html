@@ -390,11 +390,11 @@
 <div class="screen" id="s4">
   <div class="card" style="padding-bottom:40px">
     <span style="font-size:2.5rem;display:block;margin-bottom:16px">💼</span>
-    <p class="s2-question" style="font-size:1.25rem;margin-bottom:8px">Так как ты занятая бизнес-леди,</p>
-    <p class="s2-sub" style="margin-bottom:28px">предлагаю следующие даты:</p>
+    <p class="s2-question" style="margin-bottom:8px">Так как ты занятая<br>бизнес-леди,</p>
+    <p class="s2-question" style="font-size:1.9rem;margin-bottom:24px">давай 7 числа? 🥺</p>
     <div class="answer-btns">
-      <button class="answer-btn btn-date" onclick="pickDate('7 июля')">📅 7 июля</button>
-      <button class="answer-btn btn-date" onclick="pickDate('8 июля')">📅 8 июля</button>
+      <button class="answer-btn btn-yes" onclick="pickDate('7 июля')">💖 Давай!</button>
+      <button class="answer-btn btn-date" onclick="pickDate('лучше 8 июля')">Лучше 8-го</button>
     </div>
   </div>
 </div>
@@ -407,6 +407,20 @@
     <div class="answer-btns">
       <button class="answer-btn btn-date" onclick="pickActivity('Уютный домашний ужин 🏠')">🏠 Уютный домашний ужин</button>
       <button class="answer-btn btn-date" onclick="pickActivity('Просекко на закате 🌅')">🥂 Просекко на закате</button>
+      <div style="position:relative">
+        <input id="customActivity" type="text" placeholder="предложу своё..." maxlength="80"
+          style="width:100%;padding:15px 52px 15px 18px;border:2px solid #f0d0e0;border-radius:18px;
+                 font-family:inherit;font-size:1rem;color:#2d2d2d;outline:none;
+                 transition:border-color 0.2s;background:#fff;"
+          onfocus="this.style.borderColor='#e91e8c'"
+          onblur="this.style.borderColor='#f0d0e0'"
+          onkeydown="if(event.key==='Enter')sendCustom()" />
+        <button onclick="sendCustom()"
+          style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
+                 background:linear-gradient(135deg,#f875aa,#e91e8c);border:none;
+                 border-radius:12px;width:36px;height:36px;cursor:pointer;
+                 font-size:1.1rem;display:flex;align-items:center;justify-content:center;">➜</button>
+      </div>
     </div>
   </div>
 </div>
@@ -466,6 +480,12 @@
       `${chosenDate} — ${chosenActivity} 🥰<br><br>скоро напишу, обговорим детали!`;
     goTo('s6');
     setTimeout(boom, 300);
+  }
+
+  function sendCustom() {
+    const val = document.getElementById('customActivity').value.trim();
+    if (!val) { document.getElementById('customActivity').focus(); return; }
+    pickActivity('твоя идея: ' + val);
   }
 
   function boom() {
